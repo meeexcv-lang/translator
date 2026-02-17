@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Translator</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+      }
+
+      .container {
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        color: white;
+      }
+
+      h1 {
+        margin-bottom: 25px;
+        font-weight: 600;
+      }
+
+      .translator-box {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .language-select {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      select {
+        width: 40%;
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .arrow {
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      input {
+        width: 100%;
+        height: 100px;
+        border-radius: 12px;
+        border: none;
+        padding: 12px;
+        resize: none;
+        outline: none;
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        background: white;
+        color: #764ba2;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #f1f1f1;
+        transform: scale(1.02);
+      }
+
+      .result-box {
+        margin-top: 15px;
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        min-height: 50px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Simple Translator</h1>
+
+      <div class="translator-box">
+        <div class="language-select">
+          <select class="select1">
+            <option>English</option>
+            <option>Russian</option>
+          </select>
+
+          <span class="arrow">⇄</span>
+
+          <select class="select2">
+            <option>Russian</option>
+            <option>English</option>
+          </select>
+        </div>
+
+        <input placeholder="Enter text here..." />
+
+        <button>Translate</button>
+
+        <div class="result-box">
+          <p>Translation will appear here...</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      const btn = document.querySelector("button");
+      const input = document.querySelector("input");
+      let select1 = document.querySelector(".select1");
+      let select2 = document.querySelector(".select2");
+      let result = document.querySelector(".result-box");
+
+      btn.addEventListener("click", async function () {
+        let text = input.value;
+        let from = select1.value;
+        let to = select2.value;
+        const base = "https://api.mymemory.translated.net/get?";
+        const query = "q=" + text;
+        const languages = "langpair=" + from + "|" + to;
+        const URL = base + query + "&" + languages;
+        const response = await fetch(URL);
+        const data = await response.json();
+        result.textContent = data.responseData.translatedText;
+      });
+    </script>
+  </body>
+</html>
