@@ -91,7 +91,9 @@
         transform: scale(1.02);
       }
 
-      .result-box {
+      .result-box,
+      .result-box2,
+      .result-box3 {
         margin-top: 15px;
         padding: 12px;
         border-radius: 12px;
@@ -110,7 +112,6 @@
           <select class="select1">
             <option>English</option>
             <option>Russian</option>
-            <option>Kazakh</option>
           </select>
 
           <!-- <span class="arrow">⇄</span> -->
@@ -118,7 +119,6 @@
           <select class="select2">
             <option>Russian</option>
             <option>English</option>
-            <option>Kazakh</option>
           </select>
         </div>
 
@@ -129,31 +129,52 @@
         <div class="result-box">
           <p>Translation will appear here...</p>
         </div>
+        <div class="result-box2">
+          <p>Definition will appear here...</p>
+        </div>
+        <div class="result-box3">
+          <p>Transcription will appear here...</p>
+        </div>
       </div>
     </div>
     <script>
-      const btn = document.querySelector("button");
       const input = document.querySelector("input");
-      let select1 = document.querySelector(".select1");
-      let select2 = document.querySelector(".select2");
-      let result = document.querySelector(".result-box");
-
+      const result = document.querySelector(".result-box");
+      const result2 = document.querySelector(".result-box2");
+      const result3 = document.querySelector(".result-box3");
+      const btn = document.querySelector("button");
+      const select1 = document.querySelector(".select1");
+      const select2 = document.querySelector(".select2");
       btn.addEventListener("click", async function () {
+        let from = select1.value;
+        let to = select2.value;
         let text = input.value;
         if (text === "") {
           return;
         }
-        let from = select1.value;
-        let to = select2.value;
         const base = "https://api.mymemory.translated.net/get?";
+
         const query = "q=" + text;
-        const languages = "langpair=" + from + "|" + to;
-        const URL = base + query + "&" + languages;
-        const response = await fetch(URL);
-        const data = await response.json();
+        const langpair = "langpair=" + from + "|" + to;
+        const URL = base + query + "&" + langpair;
+        const promise = await fetch(URL);
+        const data = await promise.json();
+
         result.textContent = data.responseData.translatedText;
+        const url2 = `https://api.dictionaryapi.dev/api/v2/entries/en/${data.responseData.translatedText}`;
+        const response = await fetch(url2);
+        const data2 = await response.json();
+        console.log(data2);
+        const firstEntry = data2[0];
+        console.log(data2[0]);
+
+        result2.textContent = firstEntry.meanings[0].definitions[0].definition;
+        result3.textContent = firstEntry.phonetic;
       });
     </script>
+  </body>
+</html>
+
   </body>
 </html>
 
