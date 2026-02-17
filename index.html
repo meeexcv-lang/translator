@@ -110,13 +110,15 @@
           <select class="select1">
             <option>English</option>
             <option>Russian</option>
+            <option>Kazakh</option>
           </select>
 
-          <span class="arrow">⇄</span>
+          <!-- <span class="arrow">⇄</span> -->
 
           <select class="select2">
             <option>Russian</option>
             <option>English</option>
+            <option>Kazakh</option>
           </select>
         </div>
 
@@ -138,6 +140,9 @@
 
       btn.addEventListener("click", async function () {
         let text = input.value;
+        if (text === "") {
+          return;
+        }
         let from = select1.value;
         let to = select2.value;
         const base = "https://api.mymemory.translated.net/get?";
@@ -151,3 +156,4 @@
     </script>
   </body>
 </html>
+
